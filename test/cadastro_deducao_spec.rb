@@ -27,5 +27,15 @@ describe 'Cadastro de dedução' do
       expect(irpf.deducoesDeclaradas).to eq @deducoesDeclaradas
     end
   end
+
+  describe 'quando é realizado um cadastro de dedução com descrição em branco' do
+    let(:descricao) { "" }
+    let(:valor) { 1200 }
+    it 'a exceção DescricaoEmBrancoException deve ser lançada' do 
+      expect {
+        irpf.cadastroDeducao(valor, descricao). to raise_error(DescricaoEmBrancoException)
+      }
+    end
+  end
 end
 

@@ -28,6 +28,34 @@ describe 'Cadastro de rendimento' do
       end
     end
   end
+
+  describe 'quando é realizado com valores inválidos' do
+    it 'a exceção DescricaoEmBrancoException deve ser lançada caso a descrição seja vazia' do
+      expect {
+        irpf.cadastroRendimento(1000, '')
+      }.to raise_error(DescricaoEmBrancoException)
+    end
+
+    context 'a exceção ValorRendimentoInvalidoException deve ser lançada caso o valor seja' do
+      it 'vazio' do
+        expect {
+          irpf.cadastroRendimento(nil, 'Receita aluguel')
+        }.to raise_error(ValorRendimentoInvalidoException)
+      end
+
+      it 'negativo' do
+        expect {
+          irpf.cadastroRendimento(-1, 'Salário mensal')
+        }.to raise_error(ValorRendimentoInvalidoException)
+      end
+
+      it 'nulo' do
+        expect {
+          irpf.cadastroRendimento(0, 'Venda de ações')
+        }.to raise_error(ValorRendimentoInvalidoException)
+      end
+    end
+  end
 end
 
 

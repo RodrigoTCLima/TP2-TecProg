@@ -38,6 +38,8 @@ describe 'Cadastro de rendimento' do
 
     [
       { descricao: 'Salário mensal', valor: nil, categoria: 'vazio' },
+      { descricao: 'Salário mensal', valor: [], categoria: 'um array' },
+      { descricao: 'Salário mensal', valor: {}, categoria: 'um objeto' },
       { descricao: 'Receita aluguel', valor: -1, categoria: 'negativo' },
       { descricao: 'Venda de ações', valor: 0, categoria: 'nulo' }
     ].each do |parametros|

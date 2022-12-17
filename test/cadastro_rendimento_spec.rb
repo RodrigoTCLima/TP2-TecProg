@@ -1,26 +1,33 @@
 require './src/irpf.rb'
 
-describe "Cadastro de rendimento" do
+describe 'Cadastro de rendimento' do
   let(:irpf) { IRPF.new }
 
-  describe 'quando é realizado o primeiro cadastro do rendimento' do
-    let(:salarioMensalValor) { 1000 }
-    let(:salarioMensal) { 'Salário mensal' }
+  [
+    { descricao: 'Salário mensal', valor: 1000 },
+    { descricao: 'Receita aluguel', valor: 2000 },
+    { descricao: 'Venda de ações', valor: 3000 }
+  ].each do |parametros|
+    describe 'quando é realizado com valores válidos' do
+      before do
+        irpf.cadastroRendimento(parametros[:valor], parametros[:descricao])
 
-    let(:receitaAluguelValor) { 2000 }
-    let(:receitaAluguel) { 'Receita aluguel' }
+        @totalRendimentos ||= 0
+        @totalRendimentos += parametros[:valor]
 
-    before do
-      irpf.cadastroRendimento(salarioMensalValor, salarioMensal)
-      irpf.cadastroRendimento(receitaAluguelValor, receitaAluguel)
-    end
+        @rendimentosDeclarados ||= []
+        @rendimentosDeclarados << parametros[:descricao]
+      end
 
-    it 'o rendimento total deve ser igual ao valor cadastrado' do
-      expect(irpf.valorTotalRendimentos).to eq salarioMensalValor + receitaAluguelValor
-    end
+      it 'o rendimento total deve ser igual ao valor cadastrado' do
+        expect(irpf.valorTotalRendimentos).to eq @totalRendimentos
+      end
 
-    it 'a lista de rendimentos declarados deve conter o novo cadastro' do
-      expect(irpf.rendimentosDeclarados).to eq [salarioMensal, receitaAluguel]
+      it 'a lista de rendimentos declarados deve conter o novo cadastro' do
+        expect(irpf.rendimentosDeclarados).to eq @rendimentosDeclarados
+      end
     end
   end
 end
+
+

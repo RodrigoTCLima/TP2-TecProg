@@ -13,7 +13,7 @@ class IRPF
 
   def cadastroRendimento(valorRendimento, descricaoRendimento)
     raise DescricaoEmBrancoException if descricaoRendimento.nil? || descricaoRendimento.empty?
-    raise ValorRendimentoInvalidoException if valorRendimento.nil? || valorRendimento <= 0
+    raise ValorRendimentoInvalidoException if !valorRendimento.is_a?(Integer) || valorRendimento <= 0
     @valorTotalRendimentos += valorRendimento
     @rendimentosDeclarados << descricaoRendimento
   end

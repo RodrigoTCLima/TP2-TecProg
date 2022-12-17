@@ -36,23 +36,17 @@ describe 'Cadastro de rendimento' do
       }.to raise_error(DescricaoEmBrancoException)
     end
 
-    context 'a exceção ValorRendimentoInvalidoException deve ser lançada caso o valor seja' do
-      it 'vazio' do
-        expect {
-          irpf.cadastroRendimento(nil, 'Receita aluguel')
-        }.to raise_error(ValorRendimentoInvalidoException)
-      end
-
-      it 'negativo' do
-        expect {
-          irpf.cadastroRendimento(-1, 'Salário mensal')
-        }.to raise_error(ValorRendimentoInvalidoException)
-      end
-
-      it 'nulo' do
-        expect {
-          irpf.cadastroRendimento(0, 'Venda de ações')
-        }.to raise_error(ValorRendimentoInvalidoException)
+    [
+      { descricao: 'Salário mensal', valor: nil, categoria: 'vazio' },
+      { descricao: 'Receita aluguel', valor: -1, categoria: 'negativo' },
+      { descricao: 'Venda de ações', valor: 0, categoria: 'nulo' }
+    ].each do |parametros|
+      context 'a exceção ValorRendimentoInvalidoException deve ser lançada caso o valor seja' do
+        it "#{parametros[:categoria]}" do
+          expect {
+            irpf.cadastroRendimento(parametros[:valor], parametros[:descricao])
+          }.to raise_error(ValorRendimentoInvalidoException)
+        end
       end
     end
   end

@@ -49,6 +49,17 @@ describe 'Cadastro de dedução' do
     end
   end
 
-  
+  describe 'quando é realizada uma dedução com valor inválida' do
+    let(:descricao) { 'Previdencia Privada' } 
+    let(:valor)   { -1000 }
+    it 'a exceção ValorDeducaoInvalidoException deve ser lançada' do
+      expect{
+        irpf.cadastroDeducao(valor, descricao).to raise_error
+        (ValorDeducaoInvalidoException)
+      }
+    end
+  end
+
+
 end
 

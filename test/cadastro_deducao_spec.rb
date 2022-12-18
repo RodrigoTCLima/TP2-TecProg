@@ -99,13 +99,13 @@ describe 'Cadastro de dedução' do
         irpf.cadastroDependente(parametros[:nomeDependente], parametros[:dataDeNacimentoDependente])
 
         @totalDeducoes ||= 0
-        @totalDeducoes += 189.59
+        @totalDeducoes += DEDUCAO_DEPENDENTE
 
         @listaDependentes ||= []
         @listaDependentes << parametros[:nomeDependente]
       end
 
-      it 'a dedução total deve ser igual ao (número de dependentes*189,59)' do
+      it "a dedução total deve ser igual ao (número de dependentes*#{DEDUCAO_DEPENDENTE})" do
         expect(irpf.valorTotalDeducoes).to eq @totalDeducoes
       end
 

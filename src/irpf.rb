@@ -1,5 +1,7 @@
 require './src/exceptions'
 
+DEDUCAO_DEPENDENTE = 189.59
+
 class IRPF
   attr_accessor :valorTotalRendimentos, :rendimentosDeclarados
   attr_accessor :valorTotalDeducoes, :deducoesDeclaradas
@@ -39,7 +41,7 @@ class IRPF
 
   def cadastroDependente(nomeDependente, dataDeNacimentoDependente)
     raise NomeEmBrancoException if nomeDependente.nil? || nomeDependente.empty?
-    @valorTotalDeducoes += 189.59
+    @valorTotalDeducoes += DEDUCAO_DEPENDENTE
     @listaDependentes << nomeDependente
   end
 end

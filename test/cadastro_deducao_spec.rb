@@ -29,13 +29,26 @@ describe 'Cadastro de dedução' do
   end
 
   describe 'quando é realizado um cadastro de dedução com descrição em branco' do
-    let(:descricao) { "" }
+    let(:descricao) { '' }
     let(:valor) { 1200 }
     it 'a exceção DescricaoEmBrancoException deve ser lançada' do 
       expect {
-        irpf.cadastroDeducao(valor, descricao). to raise_error(DescricaoEmBrancoException)
+        irpf.cadastroDeducao(valor, descricao).to raise_error(DescricaoEmBrancoException)
       }
     end
   end
+
+  describe 'quando é realizada uma dedução com valor inválida' do
+    let(:descricao) { 'Previdencia Privada' } 
+    let(:valor)   {}
+    it 'a exceção ValorDeducaoInvalidoException deve ser lançada' do
+      expect{
+        irpf.cadastroDeducao(valor, descricao).to raise_error
+        (ValorDeducaoInvalidoException)
+      }
+    end
+  end
+
+  
 end
 

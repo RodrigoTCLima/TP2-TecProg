@@ -8,24 +8,25 @@ describe 'Cadastro de dedução' do
     {descricao: 'Funpresp', valor: 2000},
     {descricao: 'Parcela isenta de aposentadoria', valor: 4000}
   ].each do |parametros|
-  describe 'quando é realizado cadastro do dedução' do
-    before do
-      irpf.cadastroDeducao(parametros[:valor], parametros[:descricao])
-      
-      @totalDeducoes ||=0
-      @totalDeducoes += parametros[:valor]
+    describe 'quando é realizado cadastro do dedução' do
+      before do
+        irpf.cadastroDeducao(parametros[:valor], parametros[:descricao])
 
-      @deducoesDeclaradas ||= []
-      @deducoesDeclaradas << parametros[:descricao]
-      
-    end
+        @totalDeducoes ||=0
+        @totalDeducoes += parametros[:valor]
 
-    it 'a dedução total deve ser igual ao valor cadastrado' do
-      expect(irpf.valorTotalDeducoes).to eq @totalDeducoes
-    end
+        @deducoesDeclaradas ||= []
+        @deducoesDeclaradas << parametros[:descricao]
 
-    it 'a lista de deduções declaradas deve conter o novo cadastro' do
-      expect(irpf.deducoesDeclaradas).to eq @deducoesDeclaradas
+      end
+
+      it 'a dedução total deve ser igual ao valor cadastrado' do
+        expect(irpf.valorTotalDeducoes).to eq @totalDeducoes
+      end
+
+      it 'a lista de deduções declaradas deve conter o novo cadastro' do
+        expect(irpf.deducoesDeclaradas).to eq @deducoesDeclaradas
+      end
     end
   end
 
@@ -43,72 +44,84 @@ describe 'Cadastro de dedução' do
     {descricao: 'Funpresp', valor: -2000},
     {descricao: 'Parcela isenta de aposentadoria', valor: -150}
   ].each do |parametros|
-  describe 'quando é realizado cadastro do dedução com valores inválidos' do
-    it 'a exceção ValorDeducaoInvalidoException deve ser lançada' do
-      expect(irpf.cadastroDeducao(parametros[:valor], parametros[:descricao])).to raise_error(ValorDeducaoInvalidoException)
+    describe 'quando é realizado cadastro do dedução com valores inválidos' do
+      it 'a exceção ValorDeducaoInvalidoException deve ser lançada' do
+        expect(irpf.cadastroDeducao(parametros[:valor], parametros[:descricao])).to raise_error(ValorDeducaoInvalidoException)
+      end
     end
   end
 
   # cadastro de previdencia oficial
-  describe 'quando é realizado um cadastro de contrinuição previdenciaria oficial' do
-    let(:descricaoPrevidenciaOficial) { 'Previdêcia Oficial' }
-    let(:valorPrevidenciaOficial) { 1000 }
+  [ {descricao: 'Previdencia Oficial', valor: 1000},
+    {descricao: 'Previdencia Oficial2', valor: 2000},
+    {descricao: 'Previdencia Oficial3', valor: 4000}
+  ].each do |parametros|
+    describe 'quando é realizado cadastro de previdências oficiais' do
+      before do
+        irpf.cadastroPrevidenciaOficial(parametros[:valor], parametros[:descricao])
+      
+        @totalDeducoes ||=0
+        @totalDeducoes += parametros[:valor]
 
-    let(:descricaoPrevidenciaOficial2) { 'Previdêcia Oficial2' }
-    let(:valorPrevidenciaOficial2) { 2000 }
-
-    before do 
-      irpf.cadastroPrevidenciaOficial(valorPrevidenciaOficial, descricaoPrevidenciaOficial)
-      irpf.cadastroPrevidenciaOficial(valorPrevidenciaOficial2, descricaoPrevidenciaOficial2)
-    end
+        @deducoesDeclaradas ||= []
+        @deducoesDeclaradas << parametros[:descricao]
+      
+      end
     
-    it 'a dedução total deve ser igual ao valor cadastrado' do
-      expect(irpf.totalDeducoes).to eq valorPrevidenciaOficial+valorPrevidenciaOficial2
-    end
+      it 'a dedução total deve ser igual ao valor cadastrado das previdências' do
+        expect(irpf.totalDeducoes).to eq @totalDeducoes
+      end
 
-    it 'a lista de deduções declaradas deve conter o novo cadastro' do
-      expect(irpf.deducoesDeclaradas).to eq [descricaoPrevidenciaOficial, descricaoPrevidenciaOficial2]
+      it 'a lista de deduções declaradas das previdencias deve conter o novo cadastro' do
+        expect(irpf.deducoesDeclaradas).to eq @deducoesDeclaradas
+      end
     end
   end
 
   # cadastro de pensão alimentícia
-  describe 'quando é realizado um cadastro de pensão alimentícia' do
-    let(:valorPensao) { 1000 }
-    let(:valorPensao2) { 2500 }
+  [ {valor: 1000},
+    {valor: 2000},
+    {valor: 4000}
+  ].each do |parametros|
+    describe 'quando é realizado cadastros de pensões alimentícias' do
+      before do
+        irpf.cadastroPensaoAlimenticia(parametros[:valor])
+    
+        @totalDeducoes ||=0
+        @totalDeducoes += parametros[:valor]
+      end
 
-    before do
-      irpf.cadastroPensaoAlimenticia(valorPensao)
-      irpf.cadastroPensaoAlimenticia(valorPensao)
-    end
-
-    if 'a dedução total deve ser igual ao valor cadastrado' do
-      expect(irpf.totalDeducoes).to eq valorPensao+valorPensao2
+      if 'a dedução total deve ser igual à soma dos valores cadastrados' do
+        expect(irpf.totalDeducoes).to eq totalDeducoes
+      end
     end
   end
 
   # cadastro de dependentes
-  describe 'quando é realizado o cadastro de dependentes' do
-    let(:nomeDependente) { 'Pedro Tiago e João' }
-    let(:dataDeNacimentoDependente) { '01/01/2011' }
+  [ {nomeDependente: 'Pedro Tiago e João', dataDeNacimentoDependente: '01/01/2015'},
+    {nomeDependente: 'Ana Tiago e João', dataDeNacimentoDependente: '02/02/2016'},
+    {nomeDependente: 'Marcos Tiago e João', dataDeNacimentoDependente: '03/03/2017'},
+  ].each do |parametros|
+    describe 'quando é realizado o cadastro de dependentes' do
+      before do
+        irpf.cadastroDependente(parametros[:nomeDependente], parametros[:dataDeNacimentoDependente])
 
-    let(:nomeDependente2) { 'Ana Maria Marcia' }
-    let(:dataDeNacimentoDependente2) { '02/02/2012' }
+        @totalDeducoes ||=0
+        @totalDeducoes += 189.59
 
+        @listaDependentes ||=0
+        @listaDependentes << parametros[:nomeDependente]
+      end
 
-    before do
-      irpf.cadastroDependente(nomeDependente, dataDeNacimentoDependente)
-      irpf.cadastroDependente(nomeDependente2, dataDeNacimentoDependente2)
-    end
+      if 'a dedução total deve ser igual ao (número de dependentes*189,59)' do
+        expect(irpf.totalDeducoes).to eq @totalDeducoes
+      end
 
-    if 'a dedução total deve ser igual ao (número de dependentes*189,59)' do
-      expect(irpf.totalDeducoes).to eq 189.59+189.59
-    end
-
-    if 'o nome do dependente deve estar na lista de dependentes' do
-      expect(irpf.listaDependentes).to eq [nomeDependente, nomeDependente2]
+      if 'o nome do dependente deve estar na lista de dependentes' do
+        expect(irpf.listaDependentes).to eq @listaDependentes
+      end
     end
   end
 
 
 end
-

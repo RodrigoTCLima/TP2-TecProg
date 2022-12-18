@@ -2,15 +2,17 @@ require './src/irpf'
 
 describe 'Cálculo dos impostos das faixas de impostos' do
   let(:irpf) { IRPF.new }
-  let(:salarioMensal) { 2000 }
-  let(:receitaAluguel) { 3000 }
   let(:baseImpostoPorFaixa) { [1903.98, 922.67, 924.40, 913.63, 335.32] }
   let(:impostosPorFaixa) { [0, 69.2, 138.66, 205.5, 92.2] }
 
   before do
-    irpf.cadastroRendimento(salarioMensal, 'Salário mensal')
-    irpf.cadastroRendimento(receitaAluguel, 'Receita aluguel')
-    irpf.calculaTaxas
+    [
+      { descricao: 'Salário mensal', valor: 1000 },
+      { descricao: 'Receita aluguel', valor: 2000 },
+    ].each do |parametros|
+      irpf.cadastroRendimento(parametros[:valor], parametros[:descricao])
+      irpf.calculaTaxas
+    end
   end
 
   it 'a base de imposto por faixa deve ser inferior ou igual a faixa de imposto' do

@@ -54,29 +54,35 @@ describe 'Cadastro de dedução' do
     let(:descricaoPrevidenciaOficial) { 'Previdêcia Oficial' }
     let(:valorPrevidenciaOficial) { 1000 }
 
+    let(:descricaoPrevidenciaOficial2) { 'Previdêcia Oficial2' }
+    let(:valorPrevidenciaOficial2) { 2000 }
+
     before do 
       irpf.cadastroPrevidenciaOficial(valorPrevidenciaOficial, descricaoPrevidenciaOficial)
+      irpf.cadastroPrevidenciaOficial(valorPrevidenciaOficial2, descricaoPrevidenciaOficial2)
     end
     
     it 'a dedução total deve ser igual ao valor cadastrado' do
-      expect(irpf.totalDeducoes).to eq valorPrevidenciaOficial
+      expect(irpf.totalDeducoes).to eq valorPrevidenciaOficial+valorPrevidenciaOficial2
     end
 
     it 'a lista de deduções declaradas deve conter o novo cadastro' do
-      expect(irpf.deducoesDeclaradas).to eq [descricaoPrevidenciaOficial]
+      expect(irpf.deducoesDeclaradas).to eq [descricaoPrevidenciaOficial, descricaoPrevidenciaOficial2]
     end
   end
 
   # cadastro de pensão alimentícia
   describe 'quando é realizado um cadastro de pensão alimentícia' do
     let(:valorPensao) { 1000 }
+    let(:valorPensao2) { 2500 }
 
     before do
+      irpf.cadastroPensaoAlimenticia(valorPensao)
       irpf.cadastroPensaoAlimenticia(valorPensao)
     end
 
     if 'a dedução total deve ser igual ao valor cadastrado' do
-      expect(irpf.totalDeducoes).to eq valorPensao
+      expect(irpf.totalDeducoes).to eq valorPensao+valorPensao2
     end
   end
 
@@ -85,19 +91,24 @@ describe 'Cadastro de dedução' do
     let(:nomeDependente) { 'Pedro Tiago e João' }
     let(:dataDeNacimentoDependente) { '01/01/2011' }
 
+    let(:nomeDependente2) { 'Ana Maria Marcia' }
+    let(:dataDeNacimentoDependente2) { '02/02/2012' }
+
+
     before do
       irpf.cadastroDependente(nomeDependente, dataDeNacimentoDependente)
+      irpf.cadastroDependente(nomeDependente2, dataDeNacimentoDependente2)
     end
 
     if 'a dedução total deve ser igual ao (número de dependentes*189,59)' do
-      expect(irpf.totalDeducoes).to eq 189.59
+      expect(irpf.totalDeducoes).to eq 189.59+189.59
     end
 
     if 'o nome do dependente deve estar na lista de dependentes' do
-      expect(irpf.listaDependentes).to eq [nomeDependente]
+      expect(irpf.listaDependentes).to eq [nomeDependente, nomeDependente2]
     end
   end
-  
+
 
 end
 

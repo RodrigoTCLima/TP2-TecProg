@@ -7,22 +7,22 @@ describe 'Cálculo dos impostos das faixas de impostos' do
 
   before do
     [
-      { descricao: 'Salário mensal', valor: 1000 },
-      { descricao: 'Receita aluguel', valor: 2000 },
+      { descricao: 'Salário mensal', valor: 2000 },
+      { descricao: 'Receita aluguel', valor: 3000 }
     ].each do |parametros|
       irpf.cadastroRendimento(parametros[:valor], parametros[:descricao])
-      irpf.calculaTaxas
     end
+    irpf.calculaTaxas
   end
 
   it 'a base de imposto por faixa deve ser inferior ou igual a faixa de imposto' do
-    for i in 0..irpf.baseImpostoPorFaixa.length-1
+    for i in 0..irpf.baseImpostoPorFaixa.length - 1
       expect(irpf.baseImpostoPorFaixa[i]).to be_within(0.1).of(baseImpostoPorFaixa[i])
     end
   end
 
   it 'o imposto por faixa deve ser calculado a partir da base de imposto da faixa' do
-    for i in 0..irpf.impostosPorFaixa.length-1
+    for i in 0..irpf.impostosPorFaixa.length - 1
       expect(irpf.impostosPorFaixa[i]).to be_within(0.1).of(impostosPorFaixa[i])
     end
   end

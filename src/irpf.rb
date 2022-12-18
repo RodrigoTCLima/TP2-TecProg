@@ -10,6 +10,7 @@ class IRPF
     @rendimentosDeclarados = []
     @valorTotalDeducoes = 0
     @deducoesDeclaradas = []
+    @listaDependentes = []
   end
 
   def cadastroRendimento(valorRendimento, descricaoRendimento)
@@ -21,7 +22,7 @@ class IRPF
 
   def cadastroDeducao(valorDeducao, descricaoDeducao)
     raise DescricaoEmBrancoException if descricaoDeducao.nil? || descricaoDeducao.empty?
-    raise ValorDeducaoInvalidoException if valorDeducao.nil? || valorDeducao >= 0 
+    raise ValorDeducaoInvalidoException if valorDeducao.nil? || valorDeducao <= 0 
     @valorTotalDeducoes += valorDeducao
     @deducoesDeclaradas << descricaoDeducao
   end
@@ -32,7 +33,7 @@ class IRPF
   end
 
   def cadastroPensaoAlimenticia(valorPensao)
-    @valorTotalDeducoes += valorPrevidenciaOficial
+    @valorTotalDeducoes += valorPensao
     @deducoesDeclaradas << 'Pensão Alimentícia'
   end
 

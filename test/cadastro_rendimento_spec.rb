@@ -1,4 +1,4 @@
-require './src/irpf.rb'
+require './src/irpf'
 
 describe 'Cadastro de rendimento' do
   let(:irpf) { IRPF.new }
@@ -31,9 +31,9 @@ describe 'Cadastro de rendimento' do
 
   describe 'quando é realizado com valores inválidos' do
     it 'a exceção DescricaoEmBrancoException deve ser lançada caso a descrição seja vazia' do
-      expect {
+      expect do
         irpf.cadastroRendimento(1000, '')
-      }.to raise_error(DescricaoEmBrancoException)
+      end.to raise_error(DescricaoEmBrancoException)
     end
 
     [
@@ -45,13 +45,11 @@ describe 'Cadastro de rendimento' do
     ].each do |parametros|
       context 'a exceção ValorRendimentoInvalidoException deve ser lançada caso o valor seja' do
         it "#{parametros[:categoria]}" do
-          expect {
+          expect do
             irpf.cadastroRendimento(parametros[:valor], parametros[:descricao])
-          }.to raise_error(ValorRendimentoInvalidoException)
+          end.to raise_error(ValorRendimentoInvalidoException)
         end
       end
     end
   end
 end
-
-

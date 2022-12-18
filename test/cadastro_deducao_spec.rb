@@ -123,5 +123,10 @@ describe 'Cadastro de dedução' do
     end
   end
 
+  describe 'quando é realizado um cadastro de dependentes com nome em branco' do
+    it 'a exceção NomeEmBrancoException deve ser lançada' do
+      expect {irpf.cadastroDependente('', '01/01/2015')}.to raise_error(NomeEmBrancoException)
+    end
+  end
 
 end

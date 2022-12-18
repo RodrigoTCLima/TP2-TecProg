@@ -3,7 +3,6 @@ require './src/irpf'
 describe 'Cadastro de dedução' do
   let(:irpf) { IRPF.new }
 
-  # cadastro de dedução
   [{ descricao: 'Previdencia Privada', valor: 1000 },
    { descricao: 'Funpresp', valor: 2000 },
    { descricao: 'Parcela isenta de aposentadoria', valor: 4000 }].each do |parametros|

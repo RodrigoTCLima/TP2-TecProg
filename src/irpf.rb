@@ -20,6 +20,7 @@ class IRPF
 
   def cadastroDeducao(valorDeducao, descricaoDeducao)
     raise DescricaoEmBrancoException if descricaoDeducao.nil? || descricaoDeducao.empty?
+    raise ValorDeducaoInvalidoException if valorDeducao.nil? || valorDeducao >= 0 
     @valorTotalDeducoes += valorDeducao
     @deducoesDeclaradas << descricaoDeducao
   end

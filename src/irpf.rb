@@ -37,6 +37,7 @@ class IRPF
   end
 
   def cadastroDependente(nomeDependente, dataDeNacimentoDependente)
+    raise NomeEmBrancoException if nomeDependente.nil? || nomeDependente.empty?
     @valorTotalDeducoes += 189.59
     @listaDependentes << nomeDependente
   end

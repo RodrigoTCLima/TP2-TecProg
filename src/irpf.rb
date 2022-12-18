@@ -3,6 +3,7 @@ require './src/exceptions'
 class IRPF
   attr_accessor :valorTotalRendimentos, :rendimentosDeclarados
   attr_accessor :valorTotalDeducoes, :deducoesDeclaradas
+  attr_accessor :listaDependentes
 
   def initialize
     @valorTotalRendimentos = 0
@@ -23,5 +24,20 @@ class IRPF
     raise ValorDeducaoInvalidoException if valorDeducao.nil? || valorDeducao >= 0 
     @valorTotalDeducoes += valorDeducao
     @deducoesDeclaradas << descricaoDeducao
+  end
+
+  def cadastroPrevidenciaOficial(valorPrevidenciaOficial, descricaoPrevidenciaOficial)
+    @valorTotalDeducoes += valorPrevidenciaOficial
+    @deducoesDeclaradas << descricaoPrevidenciaOficial
+  end
+
+  def cadastroPensaoAlimenticia(valorPensao)
+    @valorTotalDeducoes += valorPrevidenciaOficial
+    @deducoesDeclaradas << 'Pensão Alimentícia'
+  end
+
+  def cadastroDependente(nomeDependente, dataDeNacimentoDependente)
+    @valorTotalDeducoes += 189.59
+    @listaDependentes << nomeDependente
   end
 end

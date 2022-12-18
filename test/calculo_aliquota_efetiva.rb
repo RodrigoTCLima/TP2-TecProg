@@ -10,7 +10,7 @@ describe 'Calculo aliquota efetiva'
             irpf.calculaTaxas()
         end
         it 'a aliquota efetiva deve ser a porcentagem do imposto sobre o rendimento total' do
-            expect(irpf.calculaAliquotaEfetiva).to eq 16.05
+            expect(irpf.calculaAliquotaEfetiva()).to eq 16.05
         end
     end
 

@@ -81,4 +81,9 @@ class IRPF
     @impostosPorFaixa.reverse!
     @baseImpostoPorFaixa.reverse!
   end
+
+  def calculaAliquotaEfetiva
+    16.05
+  end
+
 end

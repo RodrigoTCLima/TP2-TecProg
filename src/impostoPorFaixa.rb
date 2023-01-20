@@ -7,6 +7,7 @@ class ImpostoPorFaixas
     { faixa: 2826.65, aliquota: 15 },
     { faixa: 1903.99, aliquota: 7.5 },
   ]
+  PORCENTAGEM_TOTAL = 100
 
   def initialize(valorTotalRendimentos, valorTotalDeducoes)
     @impostosPorFaixa = []
@@ -42,7 +43,7 @@ class ImpostoPorFaixas
   end
 
   def calculaImpostoFaixaN(baseImpostoFaixaN, aliquota)
-    @impostosPorFaixa << baseImpostoFaixaN * aliquota / 100
+    @impostosPorFaixa << baseImpostoFaixaN * aliquota / PORCENTAGEM_TOTAL
   end
 
   def totalImposto

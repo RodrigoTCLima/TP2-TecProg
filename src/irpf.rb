@@ -60,6 +60,6 @@ class IRPF
   end
 
   def calculaAliquotaEfetiva
-    100 * @totalImposto / @valorTotalRendimentos
+    ImpostoPorFaixas::PORCENTAGEM_TOTAL * @totalImposto / @valorTotalRendimentos
   end
 end

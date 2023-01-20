@@ -1,4 +1,5 @@
 require './src/exceptions'
+require './src/impostoPorFaixa'
 
 DEDUCAO_DEPENDENTE = 189.59
 
@@ -7,13 +8,6 @@ class IRPF
   attr_accessor :valorTotalDeducoes, :deducoesDeclaradas
   attr_accessor :listaDependentes, :totalImposto
   attr_accessor :impostosPorFaixa, :baseImpostoPorFaixa
-
-  FAIXA_IMPOSTO = [
-    { faixa: 4664.68, aliquota: 27.5 },
-    { faixa: 3751.05, aliquota: 22.5 },
-    { faixa: 2826.65, aliquota: 15 },
-    { faixa: 1903.99, aliquota: 7.5 },
-  ]
 
   def initialize
     @valorTotalRendimentos = 0
@@ -58,37 +52,11 @@ class IRPF
   end
 
   def calculaTaxas
-    calculoBase = @valorTotalRendimentos - @valorTotalDeducoes
-
-    FAIXA_IMPOSTO.each do |imposto|
-      calculoBase = calculaBaseImpostoFaixaN(calculoBase, imposto[:faixa])
-      calculaImpostoFaixaN(@baseImpostoPorFaixa.last, imposto[:aliquota])
-    end
-
-    @baseImpostoPorFaixa << FAIXA_IMPOSTO.last[:faixa]
-    @impostosPorFaixa << 0
-
-    ordenaFaixas
-  end
-
-  def ordenaFaixas
-    @impostosPorFaixa.reverse!
-    @baseImpostoPorFaixa.reverse!
-  end
-
-  def calculaBaseImpostoFaixaN(calculoBase, impostoFaixaN)
-    impostoBaseFaixaN = calculoBase - impostoFaixaN
-    if impostoBaseFaixaN < 0
-      impostoBaseFaixaN = 0
-      impostoFaixaN = 0
-    end
-    @baseImpostoPorFaixa << impostoBaseFaixaN
-    impostoFaixaN
-  end
-
-  def calculaImpostoFaixaN(baseImpostoFaixaN, aliquota)
-    @impostosPorFaixa << baseImpostoFaixaN * aliquota / 100
-    @totalImposto += @impostosPorFaixa.last
+    impostoPorFaixa = ImpostoPorFaixas.new(@valorTotalRendimentos, @valorTotalDeducoes)
+    impostoPorFaixa.compute
+    @impostosPorFaixa = impostoPorFaixa.impostosPorFaixa
+    @baseImpostoPorFaixa = impostoPorFaixa.baseImpostoPorFaixa
+    @totalImposto = impostoPorFaixa.totalImposto
   end
 
   def calculaAliquotaEfetiva

@@ -61,29 +61,37 @@ class IRPF
     calculoBase = @valorTotalRendimentos - @valorTotalDeducoes
 
     FAIXA_IMPOSTO.each do |imposto|
-      if calculoBase > imposto[:faixa]
-        baseImpostoFaixaN = calculoBase - imposto[:faixa]
-        calculoFaixaN = (baseImpostoFaixaN) * imposto[:aliquota] / 100
-        calculoBase = imposto[:faixa]
-
-        @totalImposto += calculoFaixaN
-        @baseImpostoPorFaixa << baseImpostoFaixaN
-        @impostosPorFaixa << calculoFaixaN
-      else
-        @baseImpostoPorFaixa << 0
-        @impostosPorFaixa << 0
-      end
+      calculoBase = calculaBaseImpostoFaixaN(calculoBase, imposto[:faixa])
+      calculaImpostoFaixaN(@baseImpostoPorFaixa.last, imposto[:aliquota])
     end
 
     @baseImpostoPorFaixa << FAIXA_IMPOSTO.last[:faixa]
     @impostosPorFaixa << 0
 
+    ordenaFaixas
+  end
+
+  def ordenaFaixas
     @impostosPorFaixa.reverse!
     @baseImpostoPorFaixa.reverse!
+  end
+
+  def calculaBaseImpostoFaixaN(calculoBase, impostoFaixaN)
+    impostoBaseFaixaN = calculoBase - impostoFaixaN
+    if impostoBaseFaixaN < 0
+      impostoBaseFaixaN = 0
+      impostoFaixaN = 0
+    end
+    @baseImpostoPorFaixa << impostoBaseFaixaN
+    impostoFaixaN
+  end
+
+  def calculaImpostoFaixaN(baseImpostoFaixaN, aliquota)
+    @impostosPorFaixa << baseImpostoFaixaN * aliquota / 100
+    @totalImposto += @impostosPorFaixa.last
   end
 
   def calculaAliquotaEfetiva
     100 * @totalImposto / @valorTotalRendimentos
   end
-
 end
